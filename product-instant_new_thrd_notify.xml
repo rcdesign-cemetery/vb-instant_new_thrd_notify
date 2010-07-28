@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<product productid="instant_new_thrd_notify" active="1">
+	<title>Instant New Thread Notification</title>
+	<description>Add instant notification option for forum new threads subscriptions</description>
+	<version>0.1</version>
+	<url><![CDATA[http://www.vbulletin.org/forum/misc.php?do=productcheck&pid=instant_new_thrd_notify]]></url>
+	<versioncheckurl><![CDATA[http://www.vbulletin.org/forum/misc.php?do=productcheck&pid=instant_new_thrd_notify]]></versioncheckurl>
+	<apm_releasedate></apm_releasedate>
+	<apm_author></apm_author>
+	<apm_relatedurl></apm_relatedurl>
+	<apm_extrainfo></apm_extrainfo>
+	<apm_extraedit></apm_extraedit>
+	<dependencies>
+	</dependencies>
+	<codes>
+	</codes>
+	<templates>
+	</templates>
+	<stylevardfns>
+	</stylevardfns>
+	<stylevars>
+	</stylevars>
+	<plugins>
+		<plugin active="1" executionorder="5">
+			<title>Instant New Thread Notification</title>
+			<hookname>newthread_post_complete</hookname>
+			<phpcode><![CDATA[$intm_users = $vbulletin->db->query_read("
+        SELECT user.email, user.username
+        FROM " . TABLE_PREFIX . "subscribeforum AS subscribeforum
+        INNER JOIN " . TABLE_PREFIX . "user AS user ON (subscribeforum.userid = user.userid)
+        LEFT JOIN " . TABLE_PREFIX . "usergroup AS usergroup ON (usergroup.usergroupid = user.usergroupid)
+        LEFT JOIN " . TABLE_PREFIX . "usertextfield AS usertextfield ON (usertextfield.userid = user.userid)
+        WHERE subscribeforum.forumid = " .$foruminfo['forumid']. " AND
+            subscribeforum.emailupdate = 1 AND
+            " . (intval($vbulletin->userinfo['userid']) ? "CONCAT(' ', IF(usertextfield.ignorelist IS NULL, '', usertextfield.ignorelist), ' ') NOT LIKE '% " . intval($vbulletin->userinfo['userid']) . " %' AND" : '') . "
+            user.usergroupid <> 3 AND
+            user.userid <> " . intval($vbulletin->userinfo['userid']) . " AND
+            (usergroup.genericoptions & " . $vbulletin->bf_ugp_genericoptions['isnotbannedgroup'] . ")
+    ");
+
+vbmail_start();
+
+while($intm_user = $vbulletin->db->fetch_array($intm_users))
+{
+	eval(fetch_email_phrases('intm_message', $forum['languageid']));
+	vbmail($intm_user['email'], $subject, $message); 
+}
+
+vbmail_end();]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>Add email option to forum subscription</title>
+			<hookname>usersub_add_complete</hookname>
+			<phpcode><![CDATA[if (!$show['subscribetothread'])
+{
+	
+    $intm_option_no_notification ='<option value="0" \' . $emailselected[\'0\'] . \'>\' . vB_Template_Runtime::parsePhrase("no_email_notification") . \'</option>';
+    $intm_option_email_notification = '<option value="1" \' . $emailselected[\'1\'] . \'>\' . vB_Template_Runtime::parsePhrase("instant_notification_by_email") . \'</option>';
+    $vbulletin->templatecache['subscribe_choosetype'] = str_replace($intm_option_no_notification,$intm_option_no_notification."\n".$intm_option_email_notification,$vbulletin->templatecache['subscribe_choosetype']); 
+}]]></phpcode>
+		</plugin>
+	</plugins>
+	<phrases>
+		<phrasetype name="Email Body Text" fieldname="emailbody">
+			<phrase name="intm_message" date="1280314351" username="ruseinov" version=""><![CDATA[Dear $intm_user[username],
+
+$threadinfo[postusername] has just created a new thread titled - $threadinfo[title] - in the $foruminfo[title_clean] forum of $vboptions[bbtitle], which you have subscribed to.
+
+This thread is located at:
+$vboptions[bburl]/showthread.php?p=$newpost[postid]
+
+Here is the message that has just been posted:
+***************
+$newpost[message]
+***************
+
+
+There may be other replies also, but you will not receive any more notifications unless you additionally subscribe to the thread.
+
+All the best,
+$vboptions[bbtitle]
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Unsubscription information:
+
+To unsubscribe from this forum visit the following link:
+$vboptions[bburl]/subscription.php?do=usub&f=$foruminfo[forumid]]]></phrase>
+		</phrasetype>
+		<phrasetype name="Email Subject Text" fieldname="emailsubject">
+			<phrase name="intm_message" date="1280312951" username="ruseinov" version=""><![CDATA[New thread in forum '$foruminfo[title_clean]']]></phrase>
+		</phrasetype>
+	</phrases>
+	<options>
+	</options>
+	<helptopics>
+	</helptopics>
+	<cronentries>
+	</cronentries>
+	<faqentries>
+	</faqentries>
+	<templateedits>
+	</templateedits>
+</product>
