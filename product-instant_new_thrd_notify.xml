@@ -4,7 +4,7 @@
 	<title>Instant New Thread Notification</title>
 	<description>Add instant notification option for forum new threads subscriptions</description>
 	<version>0.1</version>
-	<url><![CDATA[http://www.vbulletin.org/forum/misc.php?do=productcheck&pid=instant_new_thrd_notify]]></url>
+	<url><![CDATA[http://www.vbulletin.org/forum/misc.php?do=producthelp&pid=instant_new_thrd_notify]]></url>
 	<versioncheckurl><![CDATA[http://www.vbulletin.org/forum/misc.php?do=productcheck&pid=instant_new_thrd_notify]]></versioncheckurl>
 	<apm_releasedate></apm_releasedate>
 	<apm_author></apm_author>

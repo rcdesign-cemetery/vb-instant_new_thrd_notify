@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<language name="Russian (RU)" vbversion="4.0.6" product="instant_new_thrd_notify" type="custom">
+	<settings>
+		<options><![CDATA[1]]></options>
+		<languagecode><![CDATA[ru]]></languagecode>
+		<charset><![CDATA[UTF-8]]></charset>
+		<imagesoverride />
+		<dateoverride><![CDATA[d.m.Y]]></dateoverride>
+		<timeoverride><![CDATA[H:i]]></timeoverride>
+		<registereddateoverride><![CDATA[d.m.Y]]></registereddateoverride>
+		<calformat1override><![CDATA[d.m.Y]]></calformat1override>
+		<calformat2override><![CDATA[d.m]]></calformat2override>
+		<logdateoverride><![CDATA[H:i, d.m.Y]]></logdateoverride>
+		<locale />
+		<decimalsep><![CDATA[.]]></decimalsep>
+		<thousandsep><![CDATA[,]]></thousandsep>
+	</settings>
+	<phrasetype name="Email Body Text" fieldname="emailbody">
+		<phrase name="intm_message" date="1280314351" username="ruseinov"><![CDATA[Уважаемый(ая) $intm_user[username],
+
+$threadinfo[postusername] только что создал(а) новую тему в разделе, на который вы подписались, - $threadinfo[title] - в разделе $foruminfo[title_clean] форума $vboptions[bbtitle].
+
+Эта тема расположена по адресу:
+$vboptions[bburl]/showthread.php?p=$newpost[postid]
+
+Размещенное сообщение:
+***************
+$newpost[message]
+***************
+
+
+Также могут быть и ответы, но вы не будете получать уведомлений, пока не подпишетесь на конкретную тему.
+
+С наилучшими пожеланиями,
+$vboptions[bbtitle]
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Отказ от подписки:
+
+Чтобы отказаться от получения рассылки по этому разделу форума, пожалуйста, перейдите на страницу: $vboptions[bburl]/subscription.php?do=usub&f=$foruminfo[forumid]]]></phrase>
+	</phrasetype>
+	<phrasetype name="Email Subject Text" fieldname="emailsubject">
+		<phrase name="intm_message" date="1280312951" username="ruseinov"><![CDATA[Новая тема в разделе '$foruminfo[title_clean]']]></phrase>
+	</phrasetype>
+</language>
